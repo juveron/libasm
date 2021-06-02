@@ -1,14 +1,16 @@
-	global _start
+global	ft_write
+extern __errno_location
 
-	section	.text
-_start:	mov	rax, 1
-	mov	rdi, 1
-	mov	rsi, message
-	mov	rdx, 13
+ft_write:
+	mov	rax, 1
 	syscall
-	mov	rax, 60
-	xor	rdi, rdi
-	syscall
-
-	section .data
-message: db	"hello, world", 10
+	cmp	rax, 0
+	jl	error
+	ret
+error:
+	neg	rax
+	mov	rdi, rax
+	call	__errno_location
+	mov	[rax], rdi
+	mov	rax, -1
+	ret
