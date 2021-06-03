@@ -1,28 +1,34 @@
-NAME:= libasm.a
+NAME = libasm.a
 
-COMPILATOR:= nasm
+SRCS =	ft_strlen.s			\
+	ft_strcpy.s			\
+	ft_strcmp.s			\
+	ft_strdup.s			\
+	ft_write.s			\
+	ft_read.s	
 
-OPTION:= -felf64
+CC = nasm -felf64
 
-SRC_FILE:= ft_strlen.s ft_write.s ft_strcpy.s ft_strcmp.s ft_read.s ft_strdup.s
+OBJS = ${SRCS:.s=.o}
 
-OBJ_FILE:= ${SRC_FILE:.s=.o}
-
-LIBMAKER:= ar rc
-
-${NAME}: ${OBJ_FILE}
-	${LIBMAKER} ${NAME} ${OBJ_FILE}
+${NAME}: ${OBJS}
+	ar rc ${NAME} ${OBJS}
 
 all: ${NAME}
 
 .s.o:
-	${COMPLIATOR} ${OPTION} -o $@ $?
+	${CC} -o $@ $?
+
+test:
+	gcc main.c ${OBJ} libasm.a
+
 clean:
-	rm -rf ${OBJ_FILE}
+	rm -rf ${OBJS}
 
 fclean: clean
-	rm -rf ${NAME}
+	rm -rf $(NAME)
 	rm -rf a.out
+
 re: fclean all
 
-.PHONY: all clean fclean re .s.o
+.PHONY: re fclean clean .s.o all
